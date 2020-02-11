@@ -1,25 +1,18 @@
 #
-# Play 2.6 Build Image
-# Docker image with libraries and tools as required for building Play 2.6 projects using SBT 
+# Java 8 Build Image
+# Docker image with tools and scripts installed to support the building of a Java 1.8 jar with Maven
 #
 
-FROM frolvlad/alpine-oraclejdk8
-MAINTAINER Agile Digital <info@agiledigital.com.au>
-LABEL Description="Docker image with libraries and tools as required for building Play 2.6 projects using SBT " Vendor="Agile Digital" Version="0.1"
+FROM adoptopenjdk/openjdk8:alpine
+LABEL Maintainer="Agile Digital <info@agiledigital.com.au>"
+LABEL Description="Docker image with tools and scripts installed to support the building of a Java 1.8 jar with Maven" Vendor="Agile Digital" Version="0.1"
 
-RUN apk add --update --no-cache bash libsodium curl
+RUN apk add --update --no-cache bash=5.0.11-r1 maven=3.6.3-r0
 
-ENV sbt_version 0.13.16
-ENV sbt_home /usr/local/sbt
-ENV PATH ${PATH}:${sbt_home}/bin
 ENV HOME /home/jenkins
 
 RUN addgroup -S -g 10000 jenkins
 RUN adduser -S -u 10000 -h $HOME -G jenkins jenkins
-
-# Install sbt
-RUN mkdir -p "$sbt_home/bin"
-RUN curl -L "https://cocl.us/sbt-0.13.16.tgz" | tar xz -C /usr/local
 
 WORKDIR /home/jenkins
 
